@@ -16,4 +16,11 @@ jobs:
         with:
           username: lucascorrea99
           password: ${{ secrets.PASSWORD_DOCKER_HUB }}
-
+          
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v3.2.0
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: lucascorrea99/testeci
