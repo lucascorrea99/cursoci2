@@ -1,29 +1,30 @@
 name: Docker
 
 on:
-  workflow_call: #executa a rotina quando chamada por outro workflow no caso o go.yml chama ela no finalzinho
+  workflow_call: #executa a rotina quando chamada por outro workflow no caso o go.yml
 
 jobs:
   docker:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest #executa num unico ambiente
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Docker Build
+      
+      - name: Setup Docker Build #monta o ambiente docker com a extenção do marketplace
         uses: docker/setup-buildx-action@v2.2.1
         
-      - name: Download a Build Artifact
+      - name: Download a Build Artifact #baixa o artefatro criado na rotina go.yml main.go
         uses: actions/download-artifact@v3.0.1
         with:
           # Artifact name
           name: programa
         
-      - name: docker login
+      - name: docker login #faz login no docker hub
         uses: docker/login-action@v2.1.0
         with:
           username: lucascorrea99
           password: ${{ secrets.PASSWORD_DOCKER_HUB }}
           
-      - name: Build and push Docker images
+      - name: Build and push Docker images #builda e faz o push da imagem criada no dockerhub
         uses: docker/build-push-action@v3.2.0
         with:
           context: .
