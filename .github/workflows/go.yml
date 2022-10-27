@@ -2,15 +2,15 @@ name: Go
 
 on:
   push:
-    branches: [ '*' ]
+    branches: [ '*' ]  #executa em qualquer tipo de branch tanto nas pull quanto push request
   pull_request:
     branches: [ '*' ]
 
 jobs:
 
   test:
-    runs-on: ${{ matrix.os}}
-    env: 
+    runs-on: ${{ matrix.os}} # roda em varios so diferentes e com varias versoes do GO com a estrategia de matrix
+    env: # variaveis de ambiente para que a aplicação rode em qualquer ambiente
       HOST: localhost
       PORT: 5432
       USER: root
@@ -45,9 +45,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: go build -v main.go
+      run: go build -v main.go #compilamos o arquivo criado com o GO
       
-    - name: Upload a Build Artifact
+    - name: Upload a Build Artifact #faz o upload do arquivo para que possa ser utilizado em outros workflows
       uses: actions/upload-artifact@v3.1.1
       with:
         # Artifact name
@@ -55,7 +55,7 @@ jobs:
         # A file, directory or wildcard pattern that describes what to upload
         path: main
         # The desired behavior if no files are found using the provided      
-  docker:
+  docker: # chama outro arquivo de rotina baseado no processo de build desse arquivo
     needs: build
     uses: ./.github/workflows/Docker.yml
     secrets: inherit
